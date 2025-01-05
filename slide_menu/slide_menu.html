@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrollable Image Menu</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .image-menu {
+      display: flex;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+    }
+    .image-menu img {
+      max-height: 150px;
+      margin-right: 10px;
+      transition: transform 0.3s;
+    }
+    .image-menu img:hover {
+      transform: scale(1.1);
+    }
+    .arrow-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 24px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="d-flex align-items-center">
+      <!-- Left Arrow -->
+      <div class="arrow-btn me-2" onclick="scrollMenu(-300)">&#9664;</div>
+
+      <!-- Image Menu -->
+      <div class="image-menu flex-grow-1 d-flex">
+        <img src="https://i.pinimg.com/474x/f9/d3/07/f9d307dd8f7851f84425d1181751933c.jpg" alt="Image 1">
+        <img src="https://via.placeholder.com/200x150" alt="Image 2">
+        <img src="https://via.placeholder.com/200x150" alt="Image 3">
+        <img src="https://via.placeholder.com/200x150" alt="Image 4">
+        <img src="https://via.placeholder.com/200x150" alt="Image 5">
+        <img src="https://via.placeholder.com/200x150" alt="Image 6">
+        <img src="https://via.placeholder.com/200x150" alt="Image 7">
+      </div>
+
+      <!-- Right Arrow -->
+      <div class="arrow-btn ms-2" onclick="scrollMenu(300)"><img src="../experiment/arrow.png" class="img-fluid" width="30"  alt=""></div>
+    </div>
+  </div>
+
+  <script>
+    const scrollMenu = (amount) => {
+      const menu = document.querySelector('.image-menu');
+      menu.scrollBy({ left: amount, behavior: 'smooth' });
+    };
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
