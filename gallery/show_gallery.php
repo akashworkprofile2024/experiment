@@ -1,52 +1,66 @@
-<?php
-$conn = mysqli_connect('localhost', 'root', '', 'demo');
-if ($conn->connect_error) {
-    die('Connection Failed: ' . $conn->connect_error);
-} else {
-    echo 'connected';
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery</title>
+    <title>Image Gallery</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .gallery img {
+        .gallery-box {
             width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 10px;
+            height: 200px; /* Set a fixed height for all boxes */
+            overflow: hidden; /* Ensures content doesn't overflow the box */
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-        .gallery .col {
-            margin-bottom: 15px;
+        .gallery-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the image covers the box entirely */
         }
     </style>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container mt-5">
         <h1 class="text-center mb-4">Image Gallery</h1>
-        <?php
-        $result = $conn->query("SELECT * FROM gallery");
-        if ($result->num_rows > 0) {
-            echo "<div class='row gallery'>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<div class='col-md-4 col-sm-6'>";
-                echo '<img src="data:image/jpeg;base64,' . base64_encode($row['image']) . '" alt="Gallery Image" class="img-fluid">';
-                echo "</div>";
+        <div class="row gy-4">
+            <?php
+            $hostname = 'localhost';
+            $user = 'root';
+            $pass = '';
+            $db = 'gallery';
+
+            $conn = mysqli_connect($hostname, $user, $pass, $db);
+
+            if (!$conn) {
+                die('Connection Failed: ' . mysqli_connect_error());
             }
-            echo "</div>";
-        } else {
-            echo "<p class='text-center'>No images found in the gallery.</p>";
-        }
-        ?>
+
+            $sql = "SELECT image FROM storeimg";
+            $result = mysqli_query($conn, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $imagePath = "image/" . $row['image'];
+                    echo "
+                        <div class='col-sm-6 col-md-4 col-lg-3'>
+                            <div class='gallery-box'>
+                                <img src='$imagePath' alt='Image'>
+                            </div>
+                        </div>
+                    ";
+                }
+            } else {
+                echo "<p class='text-center'>No images found.</p>";
+            }
+
+            mysqli_close($conn);
+            ?>
+        </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

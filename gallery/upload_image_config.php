@@ -2,17 +2,32 @@
 $hostname='localhost';
 $user='root';
 $pass='';
-$db='demo';
+$db='gallery';
 
 $conn = mysqli_connect($hostname,$user,$pass,$db);
 if(!$conn){
    die('Connection Failed: '.mysqli_connect_error());
+}else{
+   echo 'Connected';
 }
-echo 'Connected';
 
-$image = $_FILES['image']['tmp_name'];
-$imgdata = addslashes(file_get_contents($image));
+if(isset($_POST['submit'])){
+   
+   $imagename = $_FILES['image']['name']; // store file name
+   $imagedata = $_FILES['image']['tmp_name']; // temp name store
 
-$sql=mysqli_connect($conn,"INSERT INTO gallery(image)VALUES('$imgdata')");
+   move_uploaded_file($imagedata,"image/$imagename");
+   
+   $sql = "INSERT INTO storeimg(image)VALUES('$imagename')";
+   $runsql = mysqli_query($conn,$sql);
+
+
+   // message
+
+   echo 'Upload success';
+
+}
+
+
 
 ?>
