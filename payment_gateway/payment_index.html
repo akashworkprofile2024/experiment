@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment Integration</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <h1>Buy Items</h1>
+    <form id="purchase-form">
+        <div>
+            <input type="checkbox" id="item1" name="items" value="Item1" data-price="100">
+            <label for="item1">Item 1 - ₹100</label>
+        </div>
+        <div>
+            <input type="checkbox" id="item2" name="items" value="Item2" data-price="200">
+            <label for="item2">Item 2 - ₹200</label>
+        </div>
+        <p>Total: ₹<span id="total-price">0</span></p>
+        <button type="button" id="pay-now">Pay Now</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            // Calculate total price
+            $('input[name="items"]').change(function () {
+                let total = 0;
+                $('input[name="items"]:checked').each(function () {
+                    total += parseInt($(this).data('price'));
+                });
+                $('#total-price').text(total);
+            });
+
+            // Initiate Razorpay Payment
+            $('#pay-now').click(function () {
+                const total = parseInt($('#total-price').text());
+                if (total === 0) {
+                    alert('Please select at least one item.');
+                    return;
+                }
+
+                // AJAX call to backend for creating an order
+                $.post('payment_backend.php', { amount: total }, function (data) {
+                    const options = {
+                        key: 'YOUR_RAZORPAY_KEY', // Replace with your Razorpay Key
+                        amount: data.amount,
+                        currency: 'INR',
+                        name: 'Your Store',
+                        description: 'Purchase Items',
+                        order_id: data.id,
+                        handler: function (response) {
+                            // Handle successful payment
+                            alert('Payment Successful!');
+                            console.log(response);
+                        },
+                        prefill: {
+                            name: '',
+                            email: '',
+                            contact: ''
+                        }
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                }, 'json');
+            });
+        });
+    </script>
+</body>
+</html>
