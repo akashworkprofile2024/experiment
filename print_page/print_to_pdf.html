@@ -6,10 +6,21 @@
     <title>Document</title>
 </head>
 <body>
+     <header>Connect to Normal File</header>   
      <form action="../print_page/form_to_print.php" method="POST">
         Name: <input type="text" name="fname" id="fname">
         Lname: <input type="text" name="lname" id="lname">
         <input type="submit" name="submit" value="submit">
-     </form>
+     </form><br>
+
+    <header>Connected to DB</header>
+    <form action="../print_page/operation_form_database/form_to_print_using_db.php" method="POST" enctype="multipart/form-data">
+        Name: <input type="text" name="clientname" id="clientname">
+        Lname: <input type="text" name="clientsirname" id="clientsirname">
+        <input type="submit" name="submit2" value="submit2">
+    </form> 
+
 </body>
 </html>
+
+
